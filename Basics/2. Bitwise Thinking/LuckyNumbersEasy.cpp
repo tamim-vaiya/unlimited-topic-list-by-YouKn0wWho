@@ -1,44 +1,159 @@
+// using Bitmask
+#include <bits/stdc++.h>
+#include <set>
+#define nl '\n'
+#define ll long long int
+#define all(v) v.begin(), v.end()
+#define print(v)             \
+    for (auto data : v)      \
+        cout << data << " "; \
+    cout << nl
+using namespace std;
+/*
+findings:
+i)  length of the number(ans) will always even
+*/
+void solve()
+{
+    int n;
+    cin >> n;
+    int sz = 0, tmp = n;
+    while (tmp)
+    {
+        sz++;
+        tmp /= 10;
+    }
+
+    if (sz % 2)
+    {
+        sz++;
+        int half = sz / 2;
+        string s;
+        for (int i = 0; i < half; i++)
+            s += '4';
+        for (int i = 0; i < half; i++)
+            s += '7';
+        cout << s << nl;
+    }
+    else
+    {
+        set<ll> st;
+        for (int mask = 0; mask < (1 << sz); mask++)
+        {
+            ll four = 0, seven = 0, data = 0, gun = 1;
+            for (int i = 0; i < sz; i++)
+            {
+                if ((mask >> i) & 1)
+                {
+                    four++;
+                    data += (1ll * 4 * gun);
+                }
+                else
+                {
+                    seven++;
+                    data += (1ll * 7 * gun);
+                }
+                gun *= (1ll * 10); // integer overflow -_-
+            }
+            if (four == seven)
+                st.insert(data);
+        }
+
+        sz += 2; // max 10 digit [look at the constraints]
+        for (int mask = 0; mask < (1 << sz) && sz <= 10; mask++)
+        {
+            ll four = 0, seven = 0, data = 0, gun = 1;
+            for (int i = 0; i < sz; i++)
+            {
+                if ((mask >> i) & 1)
+                {
+                    four++;
+                    data += (1ll * 4 * gun);
+                }
+                else
+                {
+                    seven++;
+                    data += (1ll * 7 * gun);
+                }
+                gun *= (1ll * 10); // integer overflow -_-
+            }
+            if (four == seven)
+                st.insert(data);
+        }
+        // print(st);
+        auto it = st.lower_bound(n);
+        if (*it == n)
+            cout << n << nl;
+        else
+        {
+            auto it2 = st.upper_bound(n);
+            cout << *it2 << nl;
+        }
+    }
+}
+void doingMath()
+{
+    int s = 0, gun = 1;
+    for (int i = 5; i >= 1; i--)
+    {
+        s += (i * gun);
+        cout << s << " ";
+        gun *= 10;
+    }
+    cout << nl << s << nl;
+}
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    solve();
+    // doingMath();
+
+    return 0;
+}
+
 // If you are reading this, knock me on discord(tamimvaiya) and tell me to solve this problem using bitmask.
 
 // Learning next_permutation() {link: https://www.geeksforgeeks.org/stdnext_permutation-prev_permutation-c/} and trying by myself.
 // This one is same code from below. but this time I know how next_permutation() works. That's it.
-#include <bits/stdc++.h>
-using namespace std;
+// #include <bits/stdc++.h>
+// using namespace std;
 
-#define nl '\n'
-#define ll long long
+// #define nl '\n'
+// #define ll long long
 
-int main()
-{
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+// int main()
+// {
+//     ios::sync_with_stdio(false);
+//     cin.tie(nullptr);
 
-    vector<ll> v;
-    for (int i = 2; i <= 10; i++)
-    {
-        string s;
-        for (int j = 1; j <= i / 2; j++)
-        {
-            s += '4';
-        }
-        for (int j = 1; j <= i / 2; j++)
-        {
-            s += '7';
-        }
+//     vector<ll> v;
+//     for (int i = 2; i <= 10; i++)
+//     {
+//         string s;
+//         for (int j = 1; j <= i / 2; j++)
+//         {
+//             s += '4';
+//         }
+//         for (int j = 1; j <= i / 2; j++)
+//         {
+//             s += '7';
+//         }
 
-        do
-        {
-            v.emplace_back(stoll(s));
-        } while (next_permutation(s.begin(), s.end()));
-    }
+//         do
+//         {
+//             v.emplace_back(stoll(s));
+//         } while (next_permutation(s.begin(), s.end()));
+//     }
 
-    sort(v.begin(), v.end());
-    int n;
-    cin >> n;
-    cout << *(lower_bound(v.begin(), v.end(), n)) << nl;
+//     sort(v.begin(), v.end());
+//     int n;
+//     cin >> n;
+//     cout << *(lower_bound(v.begin(), v.end(), n)) << nl;
 
-    return 0;
-}
+//     return 0;
+// }
 
 // // Got this from codeforces, I don't understand tho. I'll look over it later when I'm free:
 // // If you are reading this, ask me if I have done it again or not. knock me here: tamimvaiya (discord)
